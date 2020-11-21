@@ -16,6 +16,9 @@ import com.javainuse.model.DAOUser;
 public interface HealthDetailsDao extends JpaRepository<DAOHealthDetails, Long> {
 	DAOHealthDetails findByUsername(String username);
 	
+	@Query("from DAOHealthDetails order by id desc")
+	ArrayList<DAOHealthDetails> selectAllRecords();
+	
 	@Query("from DAOHealthDetails where username = :name ")
 	DAOHealthDetails selectbyRecord(@Param("name")  String name);
 }

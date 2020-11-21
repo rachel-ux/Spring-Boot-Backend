@@ -18,12 +18,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.javainuse.dao.BedDao;
 import com.javainuse.dao.HealthDetailsDao;
 import com.javainuse.dao.HospitalDetailsDao;
 import com.javainuse.dao.UserDao;
 import com.javainuse.dao.UserDetailsDao;
-import com.javainuse.model.DAOUser;
-import com.javainuse.model.UserDTO;
 
 import antlr.collections.List;
 
@@ -45,6 +44,9 @@ public class JwtUserDetailsService implements UserDetailsService{
 
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
+	
+	@Autowired
+	private BedDao bedDao;
 
 
 	@Override
@@ -92,6 +94,94 @@ public class JwtUserDetailsService implements UserDetailsService{
 		
 	}
 	
+	public ArrayList<DAOHospitalDetails> getAllHospitalDetails(){
+		return hospitalDetailsDao.selectAllRecords();
+	}
+	
+	public ArrayList<DAOBed> getavailableBeds(String status, String ward){
+		char ward1 = ward.charAt(0);
+		System.out.println(ward1);
+		ArrayList<DAOBed> availableBeds = bedDao.getAvailableBed(status,ward1);
+		return availableBeds;
+	}
+	
+	public boolean updateBedStatus(String status, long id) {
+		boolean message = false;
+		System.out.println(status);
+		DAOBed returnedBed = bedDao.findById(id);
+		if(id == returnedBed.getId()) {
+			returnedBed.status = status;
+			bedDao.save(returnedBed);
+			message = true;
+		}
+		return message;
+	}
+	
+	public ArrayList<DAOHealthDetails> getAllHealthDetails(){
+		return healthDetailsDao.selectAllRecords();
+	}
+	
+	public ArrayList<DAOHospitalDetails> getrecoveredpatients(){
+		ArrayList<DAOHospitalDetails> allrecoveredpatients;
+		String status  = "recovered";
+		allrecoveredpatients = hospitalDetailsDao.selectbyOneRecord(status);
+		return allrecoveredpatients;
+	}
+	
+	public ArrayList<DAOHospitalDetails> getdeceasedpatients(){
+		ArrayList<DAOHospitalDetails> allrecoveredpatients;
+		String status  = "deceased";
+		allrecoveredpatients = hospitalDetailsDao.selectbyOneRecord(status);
+		return allrecoveredpatients;
+	}
+	
+	public ArrayList<DAOHospitalDetails> getmildpatients(){
+		ArrayList<DAOHospitalDetails> allrecoveredpatients;
+		String status  = "mild";
+		allrecoveredpatients = hospitalDetailsDao.selectbyOneRecord(status);
+		return allrecoveredpatients;
+	}
+	
+	public ArrayList<DAOHospitalDetails> getcriticalpatients(){
+		ArrayList<DAOHospitalDetails> allrecoveredpatients;
+		String status  = "critical";
+		allrecoveredpatients = hospitalDetailsDao.selectbyOneRecord(status);
+		return allrecoveredpatients;
+	}
+	
+	public boolean updateStatus(String username, String status) {
+		boolean message= false;
+		System.out.println(username);
+		DAOHospitalDetails alreadyPresentUser = hospitalDetailsDao.selectbyRecord(username);
+		if(alreadyPresentUser.getUsername().equalsIgnoreCase(username)) {
+			alreadyPresentUser.status = status;
+			hospitalDetailsDao.save(alreadyPresentUser);
+			message = true;
+		}
+		return message;
+	}
+	public boolean updateSymptoms(String username, String symptoms) {
+		boolean message = false;
+		DAOHospitalDetails alreadyavailableUser = hospitalDetailsDao.selectbyRecord(username);
+		if(alreadyavailableUser.getUsername().equalsIgnoreCase(username)) {
+			alreadyavailableUser.symptoms = symptoms;
+			hospitalDetailsDao.save(alreadyavailableUser);
+			message = true;
+		}
+		return message;
+	}
+	
+	public boolean updateBed(String username, String bed) {
+		boolean message = false;
+		System.out.println(username);
+		DAOHospitalDetails PresentUser = hospitalDetailsDao.selectbyRecord(username);
+		if(PresentUser.getUsername().equalsIgnoreCase(username)) {
+			PresentUser.bed = bed;
+			hospitalDetailsDao.save(PresentUser);
+			message = true;
+		}
+		return message;
+	}
 	public DAOHospitalDetails savehospitalDetails(HospitalDetailsDTO hospitalDetails) {
 		DAOHospitalDetails savedHospitalDetails = new DAOHospitalDetails();
 		savedHospitalDetails.setBed(hospitalDetails.getBed());

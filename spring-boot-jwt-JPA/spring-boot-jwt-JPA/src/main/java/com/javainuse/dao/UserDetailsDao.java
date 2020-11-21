@@ -10,10 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import com.javainuse.model.DAOUser;
 import com.javainuse.model.DAOUserDetails;
+import com.javainuse.model.UserDetailsDTO;
 
 @Repository
 public interface UserDetailsDao extends JpaRepository<DAOUserDetails,Long> {
-	DAOUserDetails findByusername(String username);
+	DAOUserDetails findByUsername(String username);
 	
 	@Query("from DAOUserDetails where username = :name order by id desc")
 	DAOUserDetails selectbyRecord(@Param("name") String username);

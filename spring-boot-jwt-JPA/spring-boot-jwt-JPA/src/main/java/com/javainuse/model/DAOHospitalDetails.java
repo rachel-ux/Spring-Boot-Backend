@@ -25,12 +25,12 @@ public class DAOHospitalDetails {
 	//@OneToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL.ALL, orphanRemoval = true)
 	//@JoinColumn(name = "user_id",  referencedColumnName = "id")
     //@MapsId
-	@Column(name = "username", nullable = false)
+	@Column(name = "username")
 	private String username;
 	
 	
-	@Column(name = "symptoms", nullable = false)
-	private String symptoms;
+	@Column(name = "symptoms")
+	public String symptoms;
 	
 	public String getUsername() {
 		return username;
@@ -39,11 +39,11 @@ public class DAOHospitalDetails {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	@Column(name = "bed" , nullable = false)
-	private String bed;
+	@Column(name = "bed" )
+	public String bed;
 	
-	@Column(name = "status", nullable = false)
-	private String status;
+	@Column(name = "status")
+	public String status;
 
 	public long getId() {
 		return id;

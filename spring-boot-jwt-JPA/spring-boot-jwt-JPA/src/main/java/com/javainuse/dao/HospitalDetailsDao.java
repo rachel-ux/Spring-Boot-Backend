@@ -15,7 +15,12 @@ import com.javainuse.model.DAOUserDetails;
 
 @Repository
 public interface HospitalDetailsDao extends JpaRepository<DAOHospitalDetails,Long> {
-	DAOHospitalDetails findByUsername(String username);
+	
+	@Query("from DAOHospitalDetails order by id desc")
+	ArrayList<DAOHospitalDetails> selectAllRecords();
+	
+	@Query("from DAOHospitalDetails where status = :variable order by id desc")
+	ArrayList<DAOHospitalDetails> selectbyOneRecord(@Param("variable") String status);
 	
 	@Query("from DAOHospitalDetails WHERE username = :name")
 	DAOHospitalDetails selectbyRecord(@Param("name") String name);

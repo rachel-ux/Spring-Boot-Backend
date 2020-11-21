@@ -26,10 +26,10 @@ public class DAOHealthDetails {
 	private String username;
 	
 	
-	@Column(name = "bloodgroup", nullable = false)
+	@Column(name = "bloodgroup")
 	private String bloodgroup;
 	
-	@Column(name = "organdonor" , nullable = false)
+	@Column(name = "organdonor")
 	private String organdonor;
 
 	public long getId() {

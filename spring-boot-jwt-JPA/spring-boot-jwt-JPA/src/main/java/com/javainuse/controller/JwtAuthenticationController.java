@@ -20,13 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.javainuse.service.JwtUserDetailsService;
 import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 import com.javainuse.config.JwtTokenUtil;
+import com.javainuse.model.AvailableBeds;
 import com.javainuse.model.AvailableName;
 import com.javainuse.model.AvailableUserDetails;
+import com.javainuse.model.BedStatusUpdate;
+import com.javainuse.model.BedUpdate;
+import com.javainuse.model.DAOBed;
+import com.javainuse.model.DAOHealthDetails;
+import com.javainuse.model.DAOHospitalDetails;
 import com.javainuse.model.HealthDetailsDTO;
 import com.javainuse.model.HospitalDetailsDTO;
 import com.javainuse.model.JwtRequest;
 import com.javainuse.model.JwtResponse;
 import com.javainuse.model.SearchUser;
+import com.javainuse.model.StatusUpdateDTO;
+import com.javainuse.model.SymptomsUpdate;
 import com.javainuse.model.UserDTO;
 import com.javainuse.model.UserDetailsDTO;
 
@@ -72,6 +80,78 @@ public class JwtAuthenticationController {
 		return ResponseEntity.ok(userDetailsService.savehospitalDetails(hospitalDetails));
 	}
 	
+	@RequestMapping(value = "/updatestatus", method = RequestMethod.PUT)
+	public boolean updateUserStatus(@RequestBody StatusUpdateDTO requiredUpdate){
+		boolean message = userDetailsService.updateStatus(requiredUpdate.getUsername(), requiredUpdate.getStatus());
+		return message;
+	}
+	
+	@RequestMapping(value = "/updatesymptoms", method = RequestMethod.PUT)
+	public boolean updateUserSymptoms(@RequestBody SymptomsUpdate updatedSymptoms) {
+		boolean message  = userDetailsService.updateSymptoms(updatedSymptoms.getUsername(), updatedSymptoms.getSymptoms());
+		return message;
+	}
+	
+	@RequestMapping(value = "/updatebed", method = RequestMethod.PUT)
+	public boolean updateUserBed(@RequestBody BedUpdate bedupdate) {
+		boolean message = userDetailsService.updateBed(bedupdate.getUsername(), bedupdate.getBed());
+		return message;
+	}
+	
+	@RequestMapping(value = "/gethospitaldetails", method = RequestMethod.GET)
+	public ArrayList<DAOHospitalDetails> getallHospitalDetails(){
+		ArrayList<DAOHospitalDetails> allHospitalDetails;
+		allHospitalDetails = userDetailsService.getAllHospitalDetails();
+		return allHospitalDetails;
+	}
+	
+	@RequestMapping(value = "/getrecoveredpatients", method = RequestMethod.GET)
+	public ArrayList<DAOHospitalDetails> getallrecoveredpatients(){
+		ArrayList<DAOHospitalDetails> allrecoveredpatients;
+		allrecoveredpatients = userDetailsService.getrecoveredpatients();
+		return allrecoveredpatients;
+	}
+	
+	@RequestMapping(value = "/getdeceasedpatients", method = RequestMethod.GET)
+	public ArrayList<DAOHospitalDetails> getalldeceasedpatients(){
+		ArrayList<DAOHospitalDetails> allrecoveredpatients;
+		allrecoveredpatients = userDetailsService.getdeceasedpatients();
+		return allrecoveredpatients;
+	}
+	@RequestMapping(value = "/getmildpatients", method = RequestMethod.GET)
+	public ArrayList<DAOHospitalDetails> getallmildpatients(){
+		ArrayList<DAOHospitalDetails> allrecoveredpatients;
+		allrecoveredpatients = userDetailsService.getmildpatients();
+		return allrecoveredpatients;
+	}
+	
+	@RequestMapping(value = "/getcriticalpatients", method = RequestMethod.GET)
+	public ArrayList<DAOHospitalDetails> getallcriticalpatients(){
+		ArrayList<DAOHospitalDetails> allrecoveredpatients;
+		allrecoveredpatients = userDetailsService.getcriticalpatients();
+		return allrecoveredpatients;
+	}
+	@RequestMapping(value = "/getbedsward", method = RequestMethod.POST)
+	public ArrayList<DAOBed> getallavailableBedsAWard(@RequestBody AvailableBeds ward){
+		ArrayList<DAOBed> availableBeds;
+		String status = "notbooked";
+		availableBeds = userDetailsService.getavailableBeds(status,ward.getWard());
+		return availableBeds;
+	}
+	
+	@RequestMapping(value = "/updatebedstatus", method = RequestMethod.PUT)
+	public boolean updateBedStatus(@RequestBody BedStatusUpdate statusUpdate) {
+		boolean message = userDetailsService.updateBedStatus(statusUpdate.getStatus(), statusUpdate.getId()); 
+		return message;
+	}
+	
+	
+	@RequestMapping(value = "/getHealthDetails", method = RequestMethod.GET)
+	public ArrayList<DAOHealthDetails> getallHealthDetails(){
+		ArrayList<DAOHealthDetails> allHealthDetails;
+		allHealthDetails = userDetailsService.getAllHealthDetails();
+		return allHealthDetails;
+	}
 	@RequestMapping(value = "/savehealthdetails", method = RequestMethod.POST)
 	public ResponseEntity<?> saveHealthDetails(@RequestBody HealthDetailsDTO healthDetails ){
 		return ResponseEntity.ok(userDetailsService.savehealthDetails(healthDetails));
