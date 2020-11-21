@@ -59,13 +59,17 @@ public class JwtUserDetailsService implements UserDetailsService {
 	    builder.roles(user.getRole());
 		return builder.build();
 	}
-	/*public ArrayList<AvailableUserDetails> loadByName(String username) throws UsernameNotFoundException {
-		ArrayList<AvailableUserDetails> availableUserDetails;
-		DAOUser user = userDao.findByUsername(username);
-		DAOUserDetails userdetails = 
-		return availableUserDetails;
-		
-	}*/
+	
+	public ArrayList<AvailableUserDetails> giveUserDetails(String username){
+		ArrayList<AvailableUserDetails> availableUsers = new ArrayList<AvailableUserDetails>();
+		ArrayList<DAOUser> savedUser = userDao.selectbyRecord(username);
+		ArrayList<DAOUserDetails> savedUserDetails = userDetailsDao.selectbyRecord(username);
+		ArrayList<DAOHospitalDetails> savedHospitalDetails = hospitalDetailsDao.selectbyRecord(username);
+		ArrayList<DAOHealthDetails> savedHealthDetails = healthDetailsDao.selectbyRecord(username);
+		System.out.print(savedUser.get(0));
+		System.out.println(availableUsers.get(0));
+		return availableUsers;
+	}
 	public DAOUserDetails savedetails(UserDetailsDTO userDetails) {
 		DAOUserDetails savedUser = new DAOUserDetails();
 		savedUser.setAddress(userDetails.getAddress());
@@ -73,6 +77,22 @@ public class JwtUserDetailsService implements UserDetailsService {
 		savedUser.setUsername(userDetails.getUsername());
 		return userDetailsDao.save(savedUser);
 		
+	}
+	
+	public DAOHospitalDetails savehospitalDetails(HospitalDetailsDTO hospitalDetails) {
+		DAOHospitalDetails savedHospitalDetails = new DAOHospitalDetails();
+		savedHospitalDetails.setBed(hospitalDetails.getBed());
+		savedHospitalDetails.setStatus(hospitalDetails.getStatus());
+		savedHospitalDetails.setSymptoms(hospitalDetails.getSymptoms());
+		savedHospitalDetails.setUsername(hospitalDetails.getUsername());
+		return hospitalDetailsDao.save(savedHospitalDetails);
+	}
+	public DAOHealthDetails savehealthDetails(HealthDetailsDTO healthDetails) {
+		DAOHealthDetails savedHealthDetails = new DAOHealthDetails();
+		savedHealthDetails.setBloodgroup(healthDetails.getBloodgroup());
+		savedHealthDetails.setOrgandonor(healthDetails.getOrgandonor());
+		savedHealthDetails.setUsername(healthDetails.getUsername());
+		return healthDetailsDao.save(savedHealthDetails);
 	}
 	public DAOUser save(UserDTO user) {
 		DAOUser newUser = new DAOUser();

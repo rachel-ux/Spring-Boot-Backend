@@ -22,6 +22,8 @@ import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 import com.javainuse.config.JwtTokenUtil;
 import com.javainuse.model.AvailableName;
 import com.javainuse.model.AvailableUserDetails;
+import com.javainuse.model.HealthDetailsDTO;
+import com.javainuse.model.HospitalDetailsDTO;
 import com.javainuse.model.JwtRequest;
 import com.javainuse.model.JwtResponse;
 import com.javainuse.model.SearchUser;
@@ -63,14 +65,23 @@ public class JwtAuthenticationController {
 	@RequestMapping(value = "/savedetails", method = RequestMethod.POST)
 		public ResponseEntity<?> saveUserDetails(@RequestBody UserDetailsDTO userDetails){
 			return ResponseEntity.ok(userDetailsService.savedetails(userDetails));
-		
 	}
-	/*@RequestMapping(value = "/authenticate/search", method = RequestMethod.POST)
+	
+	@RequestMapping(value = "/savehospitaldetails", method = RequestMethod.POST)
+	public ResponseEntity<?> saveHospitalDetails(@RequestBody HospitalDetailsDTO hospitalDetails){
+		return ResponseEntity.ok(userDetailsService.savehospitalDetails(hospitalDetails));
+	}
+	
+	@RequestMapping(value = "/savehealthdetails", method = RequestMethod.POST)
+	public ResponseEntity<?> saveHealthDetails(@RequestBody HealthDetailsDTO healthDetails ){
+		return ResponseEntity.ok(userDetailsService.savehealthDetails(healthDetails));
+	}
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
 		public ArrayList<AvailableUserDetails> giveUserDetails(@RequestBody SearchUser searchUser){
 		ArrayList<AvailableUserDetails> availableUser;
-		availableUser = userDetailsService.
+		availableUser = userDetailsService.giveUserDetails(searchUser.getName());
 			return availableUser;
-	}*/
+	}
 	private void authenticate(String username, String password) throws Exception {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
