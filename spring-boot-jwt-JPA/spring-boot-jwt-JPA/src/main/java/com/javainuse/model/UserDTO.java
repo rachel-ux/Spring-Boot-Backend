@@ -1,8 +1,18 @@
 package com.javainuse.model;
 
 public class UserDTO {
-	private String username;
-	private String password;
+	public String username;
+	public String password;
+	public String role;
+	public String name;
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getUsername() {
 		return username;
@@ -14,6 +24,14 @@ public class UserDTO {
 
 	public String getPassword() {
 		return password;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public void setPassword(String password) {
