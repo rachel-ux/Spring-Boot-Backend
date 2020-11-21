@@ -3,6 +3,7 @@ package com.javainuse.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -15,11 +16,13 @@ import com.javainuse.model.DAOUser;
 import com.javainuse.model.DAOUserDetails;
 
 @Repository
-public interface UserDao extends CrudRepository<DAOUser,Long> {
+public interface UserDao extends JpaRepository<DAOUser,Long> {
 	
 	DAOUser findByUsername(String username);
 	
-	@Query("SELECT name, username FROM DAOUser WHERE name = :name")
+	ArrayList<DAOUser> findByName(String name);
+	
+	@Query("from DAOUser where name = :name order by id desc")
 	ArrayList<DAOUser> selectbyRecord(@Param("name") String name);
 
 }

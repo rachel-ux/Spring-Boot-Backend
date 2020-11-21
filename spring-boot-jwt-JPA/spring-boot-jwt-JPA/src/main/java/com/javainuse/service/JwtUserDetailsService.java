@@ -28,7 +28,7 @@ import com.javainuse.model.UserDTO;
 import antlr.collections.List;
 
 @Service
-public class JwtUserDetailsService implements UserDetailsService {
+public class JwtUserDetailsService implements UserDetailsService{
 	
 
 	@Autowired
@@ -60,14 +60,27 @@ public class JwtUserDetailsService implements UserDetailsService {
 		return builder.build();
 	}
 	
-	public ArrayList<AvailableUserDetails> giveUserDetails(String username){
-		ArrayList<AvailableUserDetails> availableUsers = new ArrayList<AvailableUserDetails>();
-		ArrayList<DAOUser> savedUser = userDao.selectbyRecord(username);
-		ArrayList<DAOUserDetails> savedUserDetails = userDetailsDao.selectbyRecord(username);
-		ArrayList<DAOHospitalDetails> savedHospitalDetails = hospitalDetailsDao.selectbyRecord(username);
-		ArrayList<DAOHealthDetails> savedHealthDetails = healthDetailsDao.selectbyRecord(username);
-		System.out.print(savedUser.get(0));
-		System.out.println(availableUsers.get(0));
+	public ArrayList<AvailableUserDetails> giveUserDetails(String name) {
+		ArrayList<AvailableUserDetails> availableUsers = new ArrayList<AvailableUserDetails>(100);
+		ArrayList<DAOUser> savedUser = userDao.selectbyRecord(name);
+		for(int i = 0; i < savedUser.size(); i++) {
+			String username  = (String)savedUser.get(i).getUsername();
+			String name1 = (String)savedUser.get(i).getName();
+			DAOUserDetails savedUserDetails = userDetailsDao.selectbyRecord(username);
+			DAOHospitalDetails savedHospitalDetails = hospitalDetailsDao.selectbyRecord(username);
+			DAOHealthDetails savedHealthDetails = healthDetailsDao.selectbyRecord(username);
+			AvailableUserDetails useravailable = new AvailableUserDetails();
+			useravailable.setAddress(savedUserDetails.getAddress());
+			useravailable.setPhone(savedUserDetails.getPhone());
+			useravailable.setEmail(username);
+			useravailable.setName(name1);
+			useravailable.setBlood_group(savedHealthDetails.getBloodgroup());
+			useravailable.setOrgan_donor(savedHealthDetails.getOrgandonor());
+			useravailable.setBed(savedHospitalDetails.getBed());
+			useravailable.setSymptoms(savedHospitalDetails.getSymptoms());
+			useravailable.setStatus(savedHospitalDetails.getStatus());
+			availableUsers.add(i,useravailable);
+		}
 		return availableUsers;
 	}
 	public DAOUserDetails savedetails(UserDetailsDTO userDetails) {

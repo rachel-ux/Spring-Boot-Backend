@@ -2,6 +2,7 @@ package com.javainuse.dao;
 
 import java.util.ArrayList;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -12,9 +13,9 @@ import com.javainuse.model.DAOHospitalDetails;
 import com.javainuse.model.DAOUser;
 
 @Repository
-public interface HealthDetailsDao extends  CrudRepository<DAOHealthDetails, Long> {
+public interface HealthDetailsDao extends JpaRepository<DAOHealthDetails, Long> {
 	DAOHealthDetails findByUsername(String username);
 	
-	@Query("SELECT username, bloodgroup, organdonor FROM DAOHealthDetails WHERE name = :name")
-	ArrayList<DAOHealthDetails> selectbyRecord(@Param("name") String name);
+	@Query("from DAOHealthDetails where username = :name ")
+	DAOHealthDetails selectbyRecord(@Param("name")  String name);
 }
